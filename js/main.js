@@ -1,5 +1,5 @@
 
-const names = [
+const NAMES = [
   'Ваня',
   'Вася',
   'Петя',
@@ -10,7 +10,7 @@ const names = [
   'Юля',
 ];
 
-const messages = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце-концов это просто непрофессионально.',
@@ -19,7 +19,7 @@ const messages = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-const description = [
+const DESCRIPTIONS = [
   'Вся красота мира в одной картинке»',
   'Моменты, которые запечатлены навсегда',
   'Счастье в каждом кадре',
@@ -62,28 +62,28 @@ const getIdComments = getRandomIdGenerator(1, 500);
 
 const photoArrayCount = 25;
 
-const comment = () => {
+const getComment = () => {
   const idComments = getIdComments();
   return {
     id: idComments,
     avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-    message: getRandomArrayElement(messages),
-    name: getRandomArrayElement(names)
+    message: getRandomArrayElement(MESSAGES),
+    name: getRandomArrayElement(NAMES)
   };
 };
 
-function photos() {
+function getPhoto() {
   const idPhoto = getIdPhoto();
 
   return {
     id: idPhoto,
     url: `photos/${idPhoto}.jpg`,
-    description: getRandomArrayElement(description),
+    description: getRandomArrayElement(DESCRIPTIONS),
     likes: getRandomInteger(15, 200),
-    comments: Array.from({ length: getRandomInteger(0, 20) }, comment)
+    comments: Array.from({ length: getRandomInteger(0, 20) }, getComment)
   };
 }
 
-const arrayPhotos = () => Array.from({ length: photoArrayCount }, photos);
+const arrayPhotos = () => Array.from({ length: photoArrayCount }, getPhoto);
 
 arrayPhotos();
