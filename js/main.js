@@ -1,2 +1,4 @@
+import './thumbnails.js';
 import { arrayPhotos } from './data.js';
-arrayPhotos();
+console.log(arrayPhotos);
+
