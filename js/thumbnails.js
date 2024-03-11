@@ -1,5 +1,5 @@
 
-import { arrayPhotos } from "/js/data.js";
+import { arrayPhotos } from '/js/data.js';
 
 // Ищем шаблон
 const template = document.querySelector('#picture').content.querySelector('.picture');
