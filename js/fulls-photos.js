@@ -1,4 +1,6 @@
 import { isEscapeKey } from './util.js';
+// import './comments.js';
+import { createCommentsFragment } from './comments.js';
 
 const bigPhoto = document.querySelector('.big-picture');
 const closeButton = bigPhoto.querySelector('.big-picture__cancel');
@@ -10,33 +12,6 @@ const onDocumentKeydown = (evt) => {
     evt.preventDefault();
     closeBigPhoto();
   }
-};
-
-//создаем шаблон для комментария
-const createCommentTemplate = (({ avatar, name, message }) => {
-  const comment = document.createElement('li');
-
-  comment.innerHTML = (
-    `<li class="social__comment">
-      <img
-        class="social__picture"
-        src="${avatar}"
-        alt="${name}"
-        width="35" height="35">
-      <p class="social__text">${message}</p>
-    </li>`
-  );
-
-  return comment;
-});
-
-const createCommentsFragment = (comments) => {
-  //создаем фрагмент
-  const commentsFragment = document.createDocumentFragment();
-
-  comments.forEach((comment) => commentsFragment.appendChild(createCommentTemplate(comment)));
-  // Возвращаем комментарии
-  return commentsFragment;
 };
 
 // Открываем большое фото

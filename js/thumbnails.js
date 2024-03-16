@@ -15,7 +15,6 @@ const photoFragment = document.createDocumentFragment();
 // Создаем массив фото
 const usersPhotos = arrayPhotos();
 
-
 usersPhotos.forEach(({ id, url, description, likes, comments }) => {
   const thumbnail = template.cloneNode(true);
 
