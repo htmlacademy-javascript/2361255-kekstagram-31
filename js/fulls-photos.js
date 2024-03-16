@@ -1,5 +1,4 @@
 import { isEscapeKey } from './util.js';
-// import './comments.js';
 import { createCommentsFragment } from './comments.js';
 
 const bigPhoto = document.querySelector('.big-picture');
@@ -13,6 +12,7 @@ const onDocumentKeydown = (evt) => {
     closeBigPhoto();
   }
 };
+
 
 // Открываем большое фото
 function openBigPhoto(currentPicture) {
@@ -30,8 +30,8 @@ function openBigPhoto(currentPicture) {
   bigPhoto.querySelector('.social__comments').appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
   document.addEventListener('keydown', onDocumentKeydown);
   // Прячем  счётчик комментариев.social__comment - count
-  const commentsCount = bigPhoto.querySelector('.social__comment-count');
-  commentsCount.classList.add('hidden');
+  const totalCount = bigPhoto.querySelector('.social__comment-count');
+  totalCount.classList.add('hidden');
   // Прячем блок загрузки новых комментариев
   const commentsLoader = bigPhoto.querySelector('.comments-loader');
   commentsLoader.classList.add('hidden');
