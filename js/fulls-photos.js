@@ -5,7 +5,7 @@ const bodyContainer = document.querySelector('body');//+
 const bigPicture = document.querySelector('.big-picture');//+
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');//+
 const commentContainer = bigPicture.querySelector('.social__comments');//+ сюда добавляем комментарии
-
+const commentTemplate = document.querySelector('.social__comment');
 const commentCount = bigPicture.querySelector('.social__comment-count');//счетчик кооментариев
 const commentShownCount = bigPicture.querySelector('.social__comment-shown-count');//+кол-во отображаемых комментариев
 const commentTotalCount = bigPicture.querySelector('.social__comment-total-count');//+общее кол-во комментариев
@@ -29,7 +29,7 @@ const onCloseButtonClick = () => {
 };
 
 // Закрываем по Esc
-const onDocumentKeydown = (evt) => {
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
@@ -71,7 +71,7 @@ const renderComments = () => {
   }
   commentContainer.innerHTML = '';
   commentContainer.append(commentFragment);
-  commentShownCount.textContent = commentsQuantity;
+  commentShownCount.textContent = commentsCountShow;
   commentTotalCount.textContent = comments.length;
 };
 
