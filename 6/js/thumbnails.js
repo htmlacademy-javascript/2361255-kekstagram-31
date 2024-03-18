@@ -1,39 +1,42 @@
-
-import { openBigPhoto } from './fulls-photos';
 import { arrayPhotos } from './data.js';
-
+import { openBigPicture } from './fulls-photos.js';
 
 // Ищем шаблон
-const template = document.querySelector('#picture').content.querySelector('.picture');
+const templateUserPicture = document.querySelector('#picture').content.querySelector('.picture');
 
-// Контейнер, куда складываем фото
-const containerUsersPhotos = document.querySelector('.pictures');
+//контейнер
+const containerUsersPictures = document.querySelector('.pictures');
 
-// Создаем фрагмент
-const photoFragment = document.createDocumentFragment();
+const usersPicturesFragment = document.createDocumentFragment();
 
-// Создаем массив фото
-const usersPhotos = arrayPhotos();
+const usersPictures = arrayPhotos();
 
-usersPhotos.forEach(({ id, url, description, likes, comments }) => {
-  const thumbnail = template.cloneNode(true);
+usersPictures.forEach(({ url, description, likes, comments, id }) => {
+  //клон шаблона
+  const userPicture = templateUserPicture.cloneNode(true);
 
-  thumbnail.dataset.id = id;
-  thumbnail.querySelector('.picture__img').src = url;
-  thumbnail.querySelector('.picture__img').alt = description;
-  thumbnail.querySelector('.picture__likes').textContent = likes;
-  thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  //вставляем данные в шаблон
+  userPicture.querySelector('.picture__img').src = url;
+  userPicture.querySelector('.picture__img').alt = description;
+  userPicture.querySelector('.picture__likes').textContent = likes;
+  userPicture.querySelector('.picture__comments').textContent = comments.length;
+  userPicture.dataset.id = id;
 
-  photoFragment.appendChild(thumbnail);
-
-  //Открываем большое фото при клике на миниатюру
-  thumbnail.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    const currentPicture = usersPhotos.find((picture) => evt.currentTarget.dataset.id === picture.id.toString());
-    openBigPhoto(currentPicture);
-  });
+  usersPicturesFragment.appendChild(userPicture);
 });
 
-containerUsersPhotos.appendChild(photoFragment);
+containerUsersPictures.appendChild(usersPicturesFragment);
 
-export { containerUsersPhotos, usersPhotos };
+// Открываем большое фото
+containerUsersPictures.addEventListener('click', (evt) => {
+  const picture = evt.target.closest('.picture');
+
+  if (picture) {
+    evt.preventDefault();
+    //в массиве фотографий находим элемент/фото, id которого равно id, по которому произошел клик
+    const currentPicture = usersPictures.find((item) => picture.dataset.id === item.id.toString());
+
+    openBigPicture(currentPicture);
+  }
+});
+
