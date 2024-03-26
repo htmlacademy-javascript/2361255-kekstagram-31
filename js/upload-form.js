@@ -65,6 +65,7 @@ const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper__error',
+  errorTextTag: 'div',
 });
 
 const isUniqueArray = (array) => new Set(array).size === array.length;
@@ -118,18 +119,18 @@ pristine.addValidator(
   descriptionDefault.ERROR_COMMENT
 );
 
-const onFormSubmit = () => {
-  pristine.validate();
+//отправка фото на сервер при успешной валидации
+uploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
   const isValid = pristine.validate();
   if (isValid) {
     uploadForm.submit();
   }
-};
+});
 
 //Закрытие по кнопке
 photoEditorResetButton.addEventListener('click', onPhotoEditorResetButtonClick);
 //Слушатель на загрузку фото в форму
 uploadFile.addEventListener('change', onFileInputChange);
-
-uploadForm.addEventListener('submit', onFormSubmit);
 
