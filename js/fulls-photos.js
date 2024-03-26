@@ -1,20 +1,20 @@
 import { isEscapeKey } from './util.js';
 
-const bigPicture = document.querySelector('.big-picture');//+
-const bodyContainer = document.querySelector('body');//+
-const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');//+
+const bigPicture = document.querySelector('.big-picture');
+const bodyContainer = document.querySelector('body');
+const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const commentContainer = bigPicture.querySelector('.social__comments');// сюда добавляем комментарии+
-const commentTemplate = document.querySelector('.social__comment'); //+
-const commentShownCount = bigPicture.querySelector('.social__comment-shown-count');//+кол-во отображаемых комментариев+
-const commentTotalCount = bigPicture.querySelector('.social__comment-total-count');//+общее кол-во комментариев+
-const commentLoaderButton = bigPicture.querySelector('.social__comments-loader');//+загрузка доп. комментариев+
+const commentTemplate = document.querySelector('.social__comment');
+const commentShownCount = bigPicture.querySelector('.social__comment-shown-count');//кол-во отображаемых комментариев+
+const commentTotalCount = bigPicture.querySelector('.social__comment-total-count');//общее кол-во комментариев+
+const commentLoaderButton = bigPicture.querySelector('.social__comments-loader');//загрузка доп. комментариев+
 
-const COUNT_STEP = 5;
+const COUNT_STEP = 5;//шаг показа комментариев
 let commentsCountShown = 0;
 let comments = [];
 
 // Закрываем большое фото
-const closeBigPicture = () => {
+const oncloseBigPicture = () => {
   commentsCountShown = 0;
   bigPicture.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -22,25 +22,27 @@ const closeBigPicture = () => {
 };
 
 const onCloseButtonClick = () => {
-  closeBigPicture();
+  oncloseBigPicture();
 };
 
+//Закрываем по Esc
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeBigPicture();
+    oncloseBigPicture();
   }
 }
 
-// Создаем открытое окно с фото
+// Создаем большое фото
 const renderBigPicture = ({ url, description, likes }) => {
-  bigPicture.querySelector('.big-picture__img img').src = url;
-  bigPicture.querySelector('.big-picture__img img').alt = description;
+  const fullPhoto = bigPicture.querySelector('.big-picture__img img');
+  fullPhoto.src = url;
+  fullPhoto.alt = description;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__caption').textContent = description;
 };
 
-// Создаем один коммент по образцу
+// Шаблон для одного коммента
 const renderComment = ({ avatar, name, message }) => {
   const comment = commentTemplate.cloneNode(true);
   comment.querySelector('.social__picture').src = avatar;
@@ -50,7 +52,7 @@ const renderComment = ({ avatar, name, message }) => {
   return comment;
 };
 
-// Создаем комментарий
+// Создаем комментарии
 const renderComments = () => {
   commentsCountShown += COUNT_STEP;
   if (commentsCountShown >= comments.length) {
@@ -70,11 +72,10 @@ const renderComments = () => {
   commentTotalCount.textContent = comments.length;
 };
 
-// // Загрузка комментов по кнопке
+// // Загрузить еще
 const onСommentLoaderButtonClick = () => renderComments();
 
-
-// Открытие полноразмерного фото по нажатию на миниатюру
+// Открываем большое фото
 const openBigPicture = (dataPicture) => {
   bigPicture.classList.remove('hidden');
   bodyContainer.classList.add('modal-open');
