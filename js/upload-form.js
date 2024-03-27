@@ -1,4 +1,6 @@
 import { isEscapeKey } from './util.js';
+import { initEffect, resetEffect } from './effects.js';
+import { resetScale } from './scale.js';
 
 const descriptionDefault = {
   MAX_LENGTH_COMMENT: 140,
@@ -34,8 +36,18 @@ const openFormUpload = () => {
   document.addEventListener('keydown', onFormEscKeydown);
 };
 
+const pristine = new Pristine(uploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper__error',
+});
+
 //Закрываем окно редактора картинки
 const closeFormUpload = () => {
+  uploadForm.reset();
+  pristine.reset();
+  resetScale();
+  resetEffect();
   uploadOverlay.classList.add('hidden');
   bodyContainer.classList.remove('modal-open');
   document.removeEventListener('keydown', onFormEscKeydown);
@@ -60,13 +72,6 @@ function onFormEscKeydown(evt) {
 const onFileInputChange = (evt) => {
   openFormUpload(evt);
 };
-
-const pristine = new Pristine(uploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper__error',
-  errorTextTag: 'div',
-});
 
 const isUniqueArray = (array) => new Set(array).size === array.length;
 
@@ -119,7 +124,7 @@ pristine.addValidator(
   descriptionDefault.ERROR_COMMENT
 );
 
-//отправка фото на сервер при успешной валидации
+//отправка фото на сервер
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
@@ -134,3 +139,5 @@ photoEditorResetButton.addEventListener('click', onPhotoEditorResetButtonClick);
 //Слушатель на загрузку фото в форму
 uploadFile.addEventListener('change', onFileInputChange);
 
+// Запуск эффектов
+initEffect();
