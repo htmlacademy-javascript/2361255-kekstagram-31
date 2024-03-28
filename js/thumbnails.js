@@ -27,16 +27,16 @@ usersPictures.forEach(({ url, description, likes, comments, id }) => {
 
 containerUsersPictures.appendChild(usersPicturesFragment);
 
-// Открываем большое фото
+
 containerUsersPictures.addEventListener('click', (evt) => {
   const picture = evt.target.closest('.picture');
 
   if (picture) {
     evt.preventDefault();
-    //в массиве фотографий находим элемент/фото, id которого равно id, по которому произошел клик
-    const currentPicture = usersPictures.find((item) => picture.dataset.id === item.id.toString());
+    //в массиве находим фото, id = id, по которому произошел клик
+    const dataPicture = usersPictures.find((item) => picture.dataset.id === item.id.toString());
 
-    openBigPicture(currentPicture);
+    openBigPicture(dataPicture);
   }
 });
 
