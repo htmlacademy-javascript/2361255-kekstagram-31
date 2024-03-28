@@ -10,12 +10,6 @@ const descriptionDefault = {
 const hashtagError = {
   MAX_COUNT_HASHTAG: 5,
   MAX_SYMBOLS: 20,
-  HASHTAG_SHORT_ERROR: 'Хэштег должен быть длиннее #',
-  HASHTAG_START_ERROR: 'Хэштег должен начинаться с #',
-  HASHTAG_COUNT_ERROR: 'Использовано максимальное количество хэштегов',
-  HASHTAG_SYMBOLS_ERROR: 'Недопустимая длина хэштега',
-  HASHTAG_REGEX_ERROR: 'Использованы недопустимые спецсимволы',
-  HASHTAG_DUBLICATE_ERROR: 'Хэштеги повторяются'
 };
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -73,7 +67,7 @@ const onFileInputChange = (evt) => {
   openFormUpload(evt);
 };
 
-const isUniqueArray = (array) => new Set(array).size === array.length;
+const hashtagsArray = (array) => new Set(array).size === array.length;
 
 const validateHashtags = (value) => {
   const tags = value.trim().toLowerCase().split(/\s*(?=#)/);
@@ -83,33 +77,33 @@ const validateHashtags = (value) => {
   }
 
   if (tags.length > hashtagError.MAX_COUNT_HASHTAG) {
-    hashtagsError = hashtagError.HASHTAG_COUNT_ERROR;
+    hashtagsError = 'Использовано максимальное количество хэштегов';
     return false;
   }
 
-  if (!isUniqueArray(tags)) {
-    hashtagsError = hashtagError.HASHTAG_DUBLICATE_ERROR;
+  if (!hashtagsArray(tags)) {
+    hashtagsError = 'Хэштеги повторяются';
     return false;
   }
 
   return tags.every((tag) => {
     if (tag[0] !== '#') {
-      hashtagsError = hashtagError.HASHTAG_START_ERROR;
+      hashtagsError = 'Хэштег должен начинаться с #';
       return false;
     }
 
     if (tag.length > hashtagError.MAX_SYMBOLS) {
-      hashtagsError = hashtagError.HASHTAG_SYMBOLS_ERROR;
+      hashtagsError = 'Недопустимая длина хэштега';
       return false;
     }
 
     if (tag === '#') {
-      hashtagsError = hashtagError.HASHTAG_SHORT_ERROR;
+      hashtagsError = 'Хэштег должен быть длиннее #';
       return false;
     }
 
     if (!valideSymbols.test(tag)) {
-      hashtagsError = hashtagError.HASHTAG_REGEX_ERROR;
+      hashtagsError = 'Использованы недопустимые спецсимволы';
       return false;
     }
 
@@ -139,5 +133,4 @@ photoEditorResetButton.addEventListener('click', onPhotoEditorResetButtonClick);
 //Слушатель на загрузку фото в форму
 uploadFile.addEventListener('change', onFileInputChange);
 
-// Запуск эффектов
 initEffect();
