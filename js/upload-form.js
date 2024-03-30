@@ -130,7 +130,7 @@ uploadForm.addEventListener('submit', (evt) => {
 
 //Закрытие по кнопке
 photoEditorResetButton.addEventListener('click', onPhotoEditorResetButtonClick);
-//Слушатель на загрузку фото в форму
+//Слушатель на загрузку фото
 uploadFile.addEventListener('change', onFileInputChange);
 
 initEffect();
