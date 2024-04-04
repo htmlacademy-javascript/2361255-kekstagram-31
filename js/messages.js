@@ -41,12 +41,12 @@ const showMessage = (element, buttonClass) => {
   element.querySelector(buttonClass).addEventListener('click', onCloseButtonClick);
 };
 
-// Показ сообщения с ошибкой
+// Сообщение с ошибкой
 const showErrorMessage = () => {
   showMessage(messageError, '.error__button');
 };
 
-// Показ сообщения с успехом
+// Сообщение с успехом
 const showSuccessMessage = () => {
   showMessage(messageSuccess, '.success__button');
 };
