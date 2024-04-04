@@ -67,7 +67,7 @@ const onPhotoEditorResetButtonClick = () => closeForm();
 const isTextFieldFocused = () =>
   document.activeElement === hashtagInput || document.activeElement === commentInput;
 
-// Функция, закрывающая окно при нажатии Esc
+// Закрываем окно при нажатии Esc
 function onFormEscKeydown(evt) {
   if (isEscapeKey(evt) && !isTextFieldFocused()) {
     evt.preventDefault();
@@ -79,6 +79,7 @@ const onFileInputChange = (evt) => {
   openFormUpload(evt);
 };
 
+//Валидация
 const hashtagsArray = (array) => new Set(array).size === array.length;
 
 const validateHashtags = (value) => {
@@ -130,6 +131,7 @@ pristine.addValidator(
   descriptionDefault.ERROR_COMMENT
 );
 
+//Раз/Блокировка кнопки
 const toggleSubmitButton = (isDisabled) => {
   submitButton.disabled = isDisabled;
   submitButton.textContent = isDisabled ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;

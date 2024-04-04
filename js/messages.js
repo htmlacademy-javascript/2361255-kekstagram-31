@@ -1,11 +1,9 @@
 import { isEscapeKey } from './util.js';
 
-
-// Ищем образец сообщений в разметке
 const messageError = document.querySelector('#error').content.querySelector('.error');
 const messageSuccess = document.querySelector('#success').content.querySelector('.success');
 
-// Функция, скрывающая сообщение
+// Скрываем сообщение
 const hideMessage = () => {
   const exitMessage = document.querySelector('.success') || document.querySelector('.error');
   exitMessage.remove();
@@ -13,10 +11,10 @@ const hideMessage = () => {
   document.body.removeEventListener('click', onBodyClick);
 };
 
-// Скрытие сообщения при нажатии на кнопку закрытия
+// Скрытие сообщения по кнопке
 const onCloseButtonClick = () => hideMessage();
 
-// Скрытие сообщения при нажатии на Esc
+// Скрытие сообщения по Esc
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -33,7 +31,7 @@ function onBodyClick(evt) {
   hideMessage();
 }
 
-// Показ сообщения
+// Показываем сообщение
 const showMessage = (element, buttonClass) => {
   document.body.append(element);
   document.body.addEventListener('click', onBodyClick);
