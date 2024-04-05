@@ -1,6 +1,8 @@
 import { isEscapeKey } from './util.js';
 import { initEffect, resetEffect } from './effects.js';
 import { resetScale } from './scale.js';
+import { showErrorMessage, showSuccessMessage } from './messages.js';
+import { sendData } from './api.js';
 
 const descriptionDefault = {
   MAX_LENGTH_COMMENT: 140,
@@ -12,22 +14,22 @@ const hashtagError = {
   MAX_SYMBOLS: 20,
 };
 
+
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
-const uploadFileControl = uploadForm.querySelector('#upload-file');
+// const uploadFileControl = uploadForm.querySelector('#upload-file');
 const photoEditorResetButton = uploadForm.querySelector('.img-upload__cancel');
 const uploadFile = uploadForm.querySelector('.img-upload__input');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+const submitButton = uploadForm.querySelector('.img-upload__submit');
 let hashtagsError = '';
 const valideSymbols = /^#[a-zа-яё0-9]{1,19}$/;
 const bodyContainer = document.querySelector('body');
 
-//Открывает окно редактора картинки
-const openFormUpload = () => {
-  uploadOverlay.classList.remove('hidden');
-  bodyContainer.classList.add('modal-open');
-  document.addEventListener('keydown', onFormEscKeydown);
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
 };
 
 const pristine = new Pristine(uploadForm, {
@@ -36,30 +38,40 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
-//Закрываем окно редактора картинки
-const closeFormUpload = () => {
-  uploadForm.reset();
-  pristine.reset();
-  resetScale();
+//Закрываем окно
+const closeForm = () => {
   resetEffect();
+  pristine.reset();
+  uploadForm.reset();
+  resetScale();
+};
+
+//Закрываем окно редактора картинки
+const onCloseFormUpload = () => {
   uploadOverlay.classList.add('hidden');
   bodyContainer.classList.remove('modal-open');
   document.removeEventListener('keydown', onFormEscKeydown);
-  uploadFileControl.value = '';
 };
 
-const onPhotoEditorResetButtonClick = () => closeFormUpload();
+//Открываем окно редактора картинки
+const openFormUpload = () => {
+  uploadOverlay.classList.remove('hidden');
+  bodyContainer.classList.add('modal-open');
+  document.addEventListener('keydown', onFormEscKeydown);
+};
+
+//Нажатие на кнопку закрытия
+const onPhotoEditorResetButtonClick = () => closeForm();
 
 // Если фокус находится в поле ввода хэш-тега, отменяет закрытие по Esc.
 const isTextFieldFocused = () =>
-  document.activeElement === hashtagInput ||
-  document.activeElement === commentInput;
+  document.activeElement === hashtagInput || document.activeElement === commentInput;
 
-// Функция, закрывающая окно при нажатии Esc
+// Закрываем окно при нажатии Esc
 function onFormEscKeydown(evt) {
   if (isEscapeKey(evt) && !isTextFieldFocused()) {
     evt.preventDefault();
-    closeFormUpload();
+    closeForm();
   }
 }
 
@@ -67,6 +79,7 @@ const onFileInputChange = (evt) => {
   openFormUpload(evt);
 };
 
+//Валидация
 const hashtagsArray = (array) => new Set(array).size === array.length;
 
 const validateHashtags = (value) => {
@@ -118,19 +131,37 @@ pristine.addValidator(
   descriptionDefault.ERROR_COMMENT
 );
 
+//Раз/Блокировка кнопки
+const toggleSubmitButton = (isDisabled) => {
+  submitButton.disabled = isDisabled;
+  submitButton.textContent = isDisabled ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
+};
 //отправка фото на сервер
-uploadForm.addEventListener('submit', (evt) => {
+const onFormSubmit = async (evt) => {
   evt.preventDefault();
-
-  const isValid = pristine.validate();
-  if (isValid) {
-    uploadForm.submit();
+  if (!pristine.validate()) {
+    return;
   }
-});
 
+  try {
+    toggleSubmitButton(true);
+    await sendData(new FormData(uploadForm));
+    closeForm();
+    showSuccessMessage();
+  } catch {
+    showErrorMessage();
+  } finally {
+    toggleSubmitButton(false);
+  }
+};
+
+uploadForm.addEventListener('submit', onFormSubmit);
 //Закрытие по кнопке
 photoEditorResetButton.addEventListener('click', onPhotoEditorResetButtonClick);
 //Слушатель на загрузку фото
 uploadFile.addEventListener('change', onFileInputChange);
+uploadForm.addEventListener('reset', onCloseFormUpload);
 
 initEffect();
+
+

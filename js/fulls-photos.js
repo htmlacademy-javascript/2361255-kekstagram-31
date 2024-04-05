@@ -87,7 +87,6 @@ const openBigPicture = (dataPicture) => {
   renderBigPicture(dataPicture);
 };
 
-
 // Слушатель события клика на кнопку закрытия фото и загрузки комментов
 bigPictureClose.addEventListener('click', onCloseButtonClick);
 commentLoaderButton.addEventListener('click', onСommentLoaderButtonClick);
