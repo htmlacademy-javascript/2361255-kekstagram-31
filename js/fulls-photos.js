@@ -92,4 +92,4 @@ bigPictureClose.addEventListener('click', onCloseButtonClick);
 commentLoaderButton.addEventListener('click', onСommentLoaderButtonClick);
 
 
-export { openBigPicture };
+export { openBigPicture, renderBigPicture };
