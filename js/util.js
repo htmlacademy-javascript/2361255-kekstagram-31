@@ -31,6 +31,15 @@ const showErrorMessage = () => {
 
 // const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+function debounce(callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { showErrorMessage, isEscapeKey };
+export { debounce, showErrorMessage, isEscapeKey };
