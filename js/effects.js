@@ -8,7 +8,7 @@ const Effect = {
   DEFAULT: 'none'
 };
 
-// Добавляет эффектам стили css
+// Добавляет эффектам стили
 const effectToFilter = {
   [Effect.CHROME]: {
     filter: 'grayscale',
@@ -36,7 +36,7 @@ const effectToFilter = {
   }
 };
 
-// Настройки эффектов по тех заданию
+// Настройки эффектов
 const effectToSliderOptions = {
   [Effect.CHROME]: {
     min: 0,
@@ -110,7 +110,7 @@ const onSliderUpdate = () => {
   setImageEffect();
 };
 
-// Создает слайдер
+// Создаем слайдер
 const createSlider = ({ min, max, step }) => {
   noUiSlider.create(effectSlider, {
     range: {
@@ -142,7 +142,7 @@ const updateSlider = ({ min, max, step }) => {
   });
 };
 
-// Скрытие слайдера при дефолте и показ измененного при прочих эффектах
+// Скрываем слайдера при дефолте и показ измененного
 const changeSlider = () => {
   if (isDefault()) {
     closeSlider();
@@ -152,7 +152,7 @@ const changeSlider = () => {
   }
 };
 
-// Меняет выбранный эффект
+// Меняем выбранный эффект
 const changeEffect = (effect) => {
   defaultEffect = effect;
   changeSlider();
@@ -164,12 +164,12 @@ const resetEffect = () => {
   changeEffect(Effect.DEFAULT);
 };
 
-// Определяет нажатие на кнопку
+// Нажимаем на кнопку
 const onEffectChoose = (evt) => {
   changeEffect(evt.target.value);
 };
 
-// Запускает слайдер и эффекты
+// Запускаем слайдер и эффекты
 const initEffect = () => {
   createSlider(effectToSliderOptions[defaultEffect]);
   effects.addEventListener('change', onEffectChoose);

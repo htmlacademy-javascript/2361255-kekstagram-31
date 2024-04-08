@@ -1,9 +1,15 @@
-import { renderGallery } from './render-gallery.js';
+import { renderThumbnails } from './thumbnails.js';
 import { debounce } from './util';
-// import { renderThumbnails } from './thumbnails.js';
+
+const MAX_PICTURE_COUNT = 10;
+const DEBOUNCE_DELAY = 500;
 
 const filterElement = document.querySelector('.img-filters');
-const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
+const defaultButton = filterElement.querySelector('#filter-default');
+const randomButton = filterElement.querySelector('#filter-random');
+const discussedButton = filterElement.querySelector('#filter-discussed');
+
+const getRandomIndex = (min, max) => Math.floor(Math.random() * (max - min));
 
 const Filters = {
   DEFAULT: 'filter-default',
@@ -11,50 +17,59 @@ const Filters = {
   DISCUSSED: 'filter-discussed',
 };
 
-const SORTFUNC = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.comments.length - a.comments.length
+const filterHandles = {
+  [Filters.DEFAULT]: (data) => data,
+  [Filters.RANDOM]: (data) => {
+    const randomIndexList = [];
+    const max = Math.min(MAX_PICTURE_COUNT, data.length);
+    while (randomIndexList.length < max) {
+      const index = getRandomIndex(0, data.length);
+      if (!randomIndexList.includes(index)) {
+        randomIndexList.push(index);
+      }
+    }
+    return randomIndexList.map((index) => data[index]);
+  },
+  [Filters.DISCUSSED]: (data) => [...data].sort((a, b) => b.comments.length - a.comments.length),
 };
 
 let currentFilter = Filters.DEFAULT;
-let pictures = [];
 
-const debounceRender = debounce(renderGallery);
-
-const onFilterChange = (evt) => {
-  const targetButton = evt.target;
-  const activeButton = document.querySelector(`.${ACTIVE_BUTTON_CLASS}`);
-  if (!targetButton.matches('button')) {
-    return;
+const reRender = (evt, filter, data) => {
+  if (currentFilter !== filter) {
+    const container = document.querySelector('.pictures');
+    const filteredData = filterHandles[filter](data);
+    const picrutes = document.querySelectorAll('.picture');
+    picrutes.forEach((item) => item.remove());
+    renderThumbnails(filteredData, container);
+    currentFilter = filter;
   }
-  if (activeButton === targetButton) {
-    return;
-  }
-  activeButton.classList.toggle(ACTIVE_BUTTON_CLASS);
-  targetButton.classList.toggle(ACTIVE_BUTTON_CLASS);
-  currentFilter = targetButton.getAttribute('id');
-
-  applyFilter();
 };
 
-function applyFilter() {
-  let filteredPictures = [];
-  if (currentFilter === Filters.DEFAULT) {
-    filteredPictures = pictures;
-  }
-  if (currentFilter === Filters.RANDOM) {
-    filteredPictures = pictures.toSorted(SORTFUNC.random).slice(0, 10);
-  }
-  if (currentFilter === Filters.DISCUSSED) {
-    filteredPictures = pictures.toSorted(SORTFUNC.discussed);
-  }
-  debounceRender(filteredPictures);
-}
+const debounceRender = debounce(reRender, DEBOUNCE_DELAY);
 
-const configFilter = (picturesData) => {
+const activateFilter = () => {
+  const currentActiveElement = filterElement.querySelector('.img-filters__button--active');
+  currentActiveElement.classList.remove('img-filters__button--active');
+};
+
+const configFilter = (data) => {
   filterElement.classList.remove('img-filters--inactive');
-  filterElement.addEventListener('click', onFilterChange);
-  pictures = picturesData;
+  defaultButton.addEventListener('click', (evt) => {
+    activateFilter();
+    evt.target.classList.add('img-filters__button--active');
+    debounceRender(evt, Filters.DEFAULT, data);
+  });
+  randomButton.addEventListener('click', (evt) => {
+    activateFilter();
+    evt.target.classList.add('img-filters__button--active');
+    debounceRender(evt, Filters.RANDOM, data);
+  });
+  discussedButton.addEventListener('click', (evt) => {
+    activateFilter();
+    evt.target.classList.add('img-filters__button--active');
+    debounceRender(evt, Filters.DISCUSSED, data);
+  });
 };
 
 export { configFilter };

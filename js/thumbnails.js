@@ -1,40 +1,27 @@
-// import { openBigPicture } from './fulls-photos.js';
-//
-//   containerUsersPictures.addEventListener('click', (evt) => {
-//     const picture = evt.target.closest('.picture');
-
-//     // if (picture) {
-//     //   evt.preventDefault();
-//     //   //в массиве находим фото, id = id, по которому произошел клик
-//     //   const dataPicture = usersPictures.find((item) => picture.dataset.id === item.id.toString());
-
-//       openBigPicture(dataPicture);
-//     // }
-//   });
-// // };
-
-// Ищем шаблон
+// // Ищем шаблон
 const templateUserPicture = document.querySelector('#picture').content.querySelector('.picture');
 
-//контейнер
-const containerUsersPictures = document.querySelector('.pictures');
+const createThumbnail = ({ url, description, likes, comments, id }) => {
+  const thumbnail = templateUserPicture.cloneNode(true);
 
-const renderThumbnails = (usersPictures) => {
-  const usersPicturesFragment = document.createDocumentFragment();
-  usersPictures.forEach(({ url, description, likes, comments, id }) => {
-    const userPicture = templateUserPicture.cloneNode(true);
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__img').alt = description;
+  thumbnail.querySelector('.picture__likes').textContent = likes;
+  thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.dataset.thumbnailId = id;
 
-    userPicture.querySelector('.picture__img').src = url;
-    userPicture.querySelector('.picture__img').alt = description;
-    userPicture.querySelector('.picture__likes').textContent = likes;
-    userPicture.querySelector('.picture__comments').textContent = comments.length;
-    userPicture.dataset.thumbnailId = id;
-
-    usersPicturesFragment.appendChild(userPicture);
-  });
-
-  containerUsersPictures.appendChild(usersPicturesFragment);
+  return thumbnail;
 };
 
+const renderThumbnails = (pictures, container) => {
+  const fragment = document.createDocumentFragment();
+  pictures.forEach((picture) => {
+    const thumbnail = createThumbnail(picture);
 
-export { renderThumbnails, containerUsersPictures };
+    fragment.append(thumbnail);
+  });
+
+  container.append(fragment);
+};
+
+export { renderThumbnails };

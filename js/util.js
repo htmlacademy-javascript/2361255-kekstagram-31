@@ -1,22 +1,3 @@
-// const getRandomInteger = (min, max) => {
-//   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-//   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-//   const result = Math.random() * (upper - lower + 1) + lower;
-//   return Math.floor(result);
-// };
-
-// const getRandomIdGenerator = (min, max) => {
-//   const ids = [];
-//   return function () {
-//     let id = getRandomInteger(min, max);
-//     while (ids.includes(id)) {
-//       id = getRandomInteger(min, max);
-//     }
-//     ids.push(id);
-//     return id;
-//   };
-// };
-
 const REMOVE_MESSAGE_TIMEOUT = 5000;
 const errorMessageTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 
@@ -29,16 +10,13 @@ const showErrorMessage = () => {
   }, REMOVE_MESSAGE_TIMEOUT);
 };
 
-// const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-function debounce(callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay) => {
   let timeoutId;
-
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
+};
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
