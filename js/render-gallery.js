@@ -1,15 +1,10 @@
 import { renderThumbnails } from './thumbnails.js';
 import { openBigPicture } from './fulls-photos.js';
 
-const container = document.querySelector('.pictures');
-
-const clearGallery = () => {
-  container.querySelectorAll('a.picture').forEach((item) => item.remove());
-};
+const fotoContainer = document.querySelector('.pictures');
 
 const renderGallery = (pictures) => {
-  clearGallery();
-  container.addEventListener('click', (evt) => {
+  fotoContainer.addEventListener('click', (evt) => {
     const thumbnail = evt.target.closest('[data-thumbnail-id]');
     if (!thumbnail) {
       return;
@@ -21,7 +16,8 @@ const renderGallery = (pictures) => {
     openBigPicture(dataPicture);
   });
 
-  renderThumbnails(pictures, container);
+  renderThumbnails(pictures, fotoContainer);
 };
 
-export { renderGallery };
+export { renderGallery, };
+

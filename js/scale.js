@@ -27,7 +27,7 @@ const onBiggerButtonClick = () => {
   );
 };
 
-// Сброс масштабирования до дефолта
+// Сброс масштабирования
 const resetScale = () => scaleImage(DEFAULT_SCALE);
 
 // Cушатель событий на кнопки

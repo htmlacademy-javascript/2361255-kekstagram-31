@@ -26,7 +26,7 @@ const load = async (url, method = Method.GET, body = null) => {
 
 const getData = async () => load(BASE_URL + Route.GET_DATA);
 
-const sendData = async (dataPicture) => load(BASE_URL + Route.SEND_DATA, Method.POST, dataPicture);
+const sendData = async (body) => load(BASE_URL + Route.SEND_DATA, Method.POST, body);
 
 export { sendData, getData };
 
